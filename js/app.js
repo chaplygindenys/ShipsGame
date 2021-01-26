@@ -1,3 +1,5 @@
+/*
+
 let DocRuolls = "The game rolls: \n 1: One pirat\'s ship come to our sea of numbers (from 0 tile 6)\n 2: You can shoot it !!! Push your shoot number \n 3: The ship have one diapason of 3 numbers on the bord";
 let Hy = "If You don't want play The Game: type 'NO'";
 let Shoot;
@@ -70,3 +72,5 @@ while (Game !== false) {
         break;
     }
 }
+
+*/
