@@ -92,10 +92,6 @@ let view = {
 };
 // модель поведения игры
 
-let ship1 = {location: ['.id1 .id3', '.id2 .id3', '.id3 .id3'], hits: ['', '', '']};
-let ship2 = {location: ['.id1 .id5', '.id2 .id5', '.id3 .id5'], hits: ['', '', '']};
-let ship3 = {location: ['.id1 .id1', '.id2 .id1', '.id3 .id1'], hits: ['', '', '']};
-let ships = [ship1, ship2, ship3];
 let model = {
     bordSize: 7,//размер игрового поля
     numShip: 3,//
@@ -109,19 +105,41 @@ let model = {
     fire:function (guess){//получает коодинаты выстрела
         for(let i= 0; i<this.numShip;i++){
             let ship = this.ships[i];
-            location=ship.location;
-            let index = location.indexOf(guess);
+
+            // location=ship.location;
+            // let index = location.indexOf(guess);
+            let index = ship.location.indexOf(guess);
             if(index >= 0){
+                view.displayHit(guess)
+                view.displayMessage("YOU HIT!!!!")
                 ship.hits[index]='hit';
+                if(this.isSunk(ship)){
+                   this.shipsSunk++
+                    view.displayMessage("YOU ARE DONE MY BOOTLSHIP!!")
+                }
                 return true;
             }
         }
+        view.displayMiss(guess);
+        view.displayMessage("MISS)))")
         return false;
+    },
+    isSunk:function (ship) {// done or not
+        for(let i= 0; i<this.shipsLength;i++){
+          if(ship.hits[i] !== 'hit' ){
+            return false;
+          }
+        }
+        return true;
     }
 
-
 }
-
+/*model.fire('.id1 .id3');
+model.fire('.id2 .id3');
+model.fire('.id3 .id3');
+model.fire('.id3 .id6');
+model.fire('.id4 .id2');
+model.fire('.id7 .id7');*/
 /*view.displayMessage("some masemfgfdhjgfdjh");
 view.displayHit('.id3 .id6');
 view.displayMiss(".id3 .id7")*/
