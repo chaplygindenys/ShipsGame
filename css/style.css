@@ -18,6 +18,7 @@ div.board{
     top: 20px;
     left: 0px;
     color: #78b30d;
+    font-size: 30px;
 
 }
 table{
@@ -32,9 +33,10 @@ table{
      height: 96px;
  }
  form{
+
      position: absolute;
-     top: 20px;
-     right: 0px;
+     top: 10px;
+     right: 5px;
      padding: 15px;
      background-color: #78b30d;
  }
@@ -43,8 +45,15 @@ table{
      background-color: #172c05;
      border-color: #78b30d;
      border-inline-start-color: #78b30d;
-     font-size: 1.1em;
+     font-size:40px;
      color:#78b30d;
+
+ }
+ .press{
+     height: 50px;
+     width: 120px;
+ }
+ button{
 
  }
  .hit{
