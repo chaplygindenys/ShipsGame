@@ -115,7 +115,7 @@ let model = {
                 ship.hits[index] = 'hit';
                 if (this.isSunk(ship)) {
                     this.shipsSunk++
-                    view.displayMessage("YOU ARE DONE MY BOOTLSHIP!!")
+                    view.displayMessage("YOU ARE SUNK MY BOOTLSHIP!!")
                 }
                 return true;
             }
@@ -169,7 +169,26 @@ function parsesGuess(guess) {
     column++;
     return ".id" + row + " " + ".id" + column;
 }
-
+function init(){
+    let button = document.querySelector('.button');
+    button.onclick = heandleButton;
+    let press = document.querySelector('.press');
+     press.onkeypress = heandleKeyPress;
+}
+function heandleButton(){
+    let press = document.querySelector('.press');
+     let guess = press.value;
+     controller.processGuesses(guess);
+    press.value ="";
+}
+function heandleKeyPress(e){
+    let button = document.querySelector('.button');
+    if (e.keyCode === 13) {
+        button.click();
+        return false;
+    }
+}
+ window.onload = init();
 /*controller.processGuesses("A0");
 controller.processGuesses("A2");
 controller.processGuesses("A4");
