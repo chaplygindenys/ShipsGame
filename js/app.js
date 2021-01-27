@@ -102,19 +102,19 @@ let model = {
         ship2 = {location: ['.id1 .id5', '.id2 .id5', '.id3 .id5'], hits: ['', '', '']},
         ship3 = {location: ['.id1 .id1', '.id2 .id1', '.id3 .id1'], hits: ['', '', '']}
     ],
-    fire:function (guess){//получает коодинаты выстрела
-        for(let i= 0; i<this.numShip;i++){
+    fire: function (guess) {//получает коодинаты выстрела
+        for (let i = 0; i < this.numShip; i++) {
             let ship = this.ships[i];
 
             // location=ship.location;
             // let index = location.indexOf(guess);
             let index = ship.location.indexOf(guess);
-            if(index >= 0){
+            if (index >= 0) {
                 view.displayHit(guess)
                 view.displayMessage("YOU HIT!!!!")
-                ship.hits[index]='hit';
-                if(this.isSunk(ship)){
-                   this.shipsSunk++
+                ship.hits[index] = 'hit';
+                if (this.isSunk(ship)) {
+                    this.shipsSunk++
                     view.displayMessage("YOU ARE DONE MY BOOTLSHIP!!")
                 }
                 return true;
@@ -124,16 +124,43 @@ let model = {
         view.displayMessage("MISS)))")
         return false;
     },
-    isSunk:function (ship) {// done or not
-        for(let i= 0; i<this.shipsLength;i++){
-          if(ship.hits[i] !== 'hit' ){
-            return false;
-          }
+    isSunk: function (ship) {// done or not
+        for (let i = 0; i < this.shipsLength; i++) {
+            if (ship.hits[i] !== 'hit') {
+                return false;
+            }
         }
         return true;
     }
 
 }
+let controller = {
+    guesses: 0,
+    processGuesses: function (guess) {
+
+    },
+
+}
+
+function parsesGuess(guess) {
+    let alphabet = ["A", "B", "C", "D", "E", "F", "G",];
+    if (guess === null || guess.length !== 2) {
+        view.displayMessage(guess + " wrong guess!");
+        return guess = null;
+    }
+    let firstChar = guess.charAt(0);
+    let row = alphabet.indexOf(firstChar);
+    let column = guess.charAt(1);
+    if (isNaN(column) || column < 0 || column >= model.bordSize || row === -1) {
+        view.displayMessage(guess + " wrong guess!");
+        return guess = null;
+    }
+    row++;
+    column++;
+    return ".id" + row + " " + ".id" + column;
+}
+console.log(parsesGuess(""))
+alert(parsesGuess("0A"))
 /*model.fire('.id1 .id3');
 model.fire('.id2 .id3');
 model.fire('.id3 .id3');
