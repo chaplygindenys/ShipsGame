@@ -53,8 +53,10 @@ table{
      height: 90px;
      width: 180px;
  }
- button{
-
+ .button{
+position: absolute;
+     right: 10px;
+     top: 10px;
  }
  .hit{
      background: url("../img/ship.png") no-repeat center center;
