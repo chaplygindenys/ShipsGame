@@ -137,7 +137,17 @@ let model = {
 let controller = {
     guesses: 0,
     processGuesses: function (guess) {
-
+        let location = 0;
+        if ( parsesGuess(guess)) {
+             location = parsesGuess(guess);
+            this.guesses++
+        }
+        let hit = model.fire(location)
+        if(hit && model.shipsSunk === model.numShip){
+            view.displayMessage("YOU ARE SUNK "+model.shipsSunk+" MY BOTLESHIP!!\n"+
+                "<p>Guesses:"+ this.guesses+"</p><p>Hits:......"+(model.shipsSunk*model.shipsLength)+
+                "</p><p>Result:.."+ (100*((model.shipsSunk*model.shipsLength)/this.guesses))+"</p>")
+        }
     },
 
 }
@@ -159,8 +169,23 @@ function parsesGuess(guess) {
     column++;
     return ".id" + row + " " + ".id" + column;
 }
-console.log(parsesGuess(""))
-alert(parsesGuess("0A"))
+
+/*controller.processGuesses("A0");
+controller.processGuesses("A2");
+controller.processGuesses("A4");
+controller.processGuesses("B0");
+controller.processGuesses("B2");
+controller.processGuesses("B4");
+controller.processGuesses("B5");
+controller.processGuesses("C0");
+controller.processGuesses("C2");
+controller.processGuesses("C4");*/
+
+
+
+
+/*console.log(parsesGuess(""))
+alert(parsesGuess("0A"))*/
 /*model.fire('.id1 .id3');
 model.fire('.id2 .id3');
 model.fire('.id3 .id3');
