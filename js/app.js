@@ -82,11 +82,11 @@ let view = {
     },
     displayHit: function (location) {
         let cell = document.querySelector(location);  //setElementById
-        cell.setAttribute("class", "hit")
+        cell.setAttribute("style", "background: url(\"./img/ship.png\") no-repeat center center")
     },
     displayMiss: function (location) {
         let cell = document.querySelector(location);  //setElementById
-        cell.setAttribute("class", "miss")
+        cell.setAttribute("style", "background: url(\"./img/miss.png\") no-repeat center center")
 
     }
 };
