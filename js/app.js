@@ -106,8 +106,6 @@ let model = {
         for (let i = 0; i < this.numShip; i++) {
             let ship = this.ships[i];
 
-            // location=ship.location;
-            // let index = location.indexOf(guess);
             let index = ship.location.indexOf(guess); //ПРОВЕРЯЕМ БЫЛО ЛИ СОВПАДЕНИЕ С МАСИВОМ КАРАБЛЕЙ
             if (index >= 0) {
                 view.displayHit(guess)
@@ -184,6 +182,7 @@ let model = {
 
 }
 let controller = {
+
     guesses: 0,
     processGuesses: function (guess) {
         let location = parsesGuess(guess); // null or guess
@@ -201,10 +200,12 @@ let controller = {
 
 function parsesGuess(guess) {
     let alphabet = ["A", "B", "C", "D", "E", "F", "G",];
-
+    if (guess === "SOS") {
+        alert("Подсказка:\n" + model.ships[0].location + "\n" + model.ships[1].location + "\n" + model.ships[2].location)
+    }
     if (guess === null || guess.length !== 2) {
         alert(guess + " wrong guess!"); // view.displayMessage
-    }else {
+    } else {
 
         let firstChar = guess.charAt(0); //берем первый символ
         let row = alphabet.indexOf(firstChar); //сверяем превый символ с проверочным масивом
@@ -212,11 +213,12 @@ function parsesGuess(guess) {
 
         if (isNaN(column) || column < 0 || column >= model.bordSize || row === -1) {
             alert(guess + " wrong guess!"); // view.displayMessage
-        }else {
+        } else {
             row++;
             column++;
             return ".id" + row + " " + ".id" + column;
         }
+
     }
     return null;
 }
@@ -226,8 +228,8 @@ function init() {
     button.onclick = heandleButton; // КЛИКУ МЫШИ ПО КНОПКЕ ПРИСВАЕВАЕТСЯ ФУНКЦИЯ
     let press = document.querySelector('.press'); // getElementById
     press.onkeypress = heandleKeyPress; //НАЖАТИЮ КЛАВИШИ ПРИСВАЕВАЕТСЯ ФУКЦИЯ
-
     model.makeNewShips();
+
 }
 
 function heandleButton() {
@@ -244,5 +246,6 @@ function heandleKeyPress(e) { // ЗАПУСКАЕТ КЛИК ПО КНОПКЕ, 
         return false;
     }
 }
+
 window.onload = init();
 

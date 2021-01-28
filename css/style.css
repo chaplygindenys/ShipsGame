@@ -64,3 +64,11 @@ position: absolute;
 .miss{
     background: url("../img/miss.png") no-repeat center center;
 }
+.rolls{
+    font: Montserrat;
+    font-weight: 400;
+    font-size:40px;
+    color:#172c05;
+    margin-left:20% ;
+    margin-bottom: 100px;
+}
