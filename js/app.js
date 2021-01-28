@@ -77,15 +77,15 @@ while (Game !== false) {
 //вывод данных на экран
 let view = {
     displayMessage: function (msg) {
-        let messenger = document.querySelector('.messenger');
+        let messenger = document.querySelector('.messenger'); //setElementById
         messenger.innerHTML = msg
     },
     displayHit: function (location) {
-        let cell = document.querySelector(location)
+        let cell = document.querySelector(location);  //setElementById
         cell.setAttribute("class", "hit")
     },
     displayMiss: function (location) {
-        let cell = document.querySelector(location)
+        let cell = document.querySelector(location);  //setElementById
         cell.setAttribute("class", "miss")
 
     }
@@ -98,9 +98,9 @@ let model = {
     shipsLength: 3,
     shipsSunk: 0,//потопленые корабли
     ships: [
-        ship1 = {location: ['.id1 .id3', '.id2 .id3', '.id3 .id3'], hits: ['', '', '']},
-        ship2 = {location: ['.id1 .id5', '.id2 .id5', '.id3 .id5'], hits: ['', '', '']},
-        ship3 = {location: ['.id1 .id1', '.id2 .id1', '.id3 .id1'], hits: ['', '', '']}
+        ship1 = {location: ['', '', ''], hits: ['', '', '']},
+        ship2 = {location: ['', '', ''], hits: ['', '', '']},
+        ship3 = {location: ['', '', ''], hits: ['', '', '']}
     ],
     fire: function (guess) {//получает коодинаты выстрела
         for (let i = 0; i < this.numShip; i++) {
@@ -108,7 +108,7 @@ let model = {
 
             // location=ship.location;
             // let index = location.indexOf(guess);
-            let index = ship.location.indexOf(guess);
+            let index = ship.location.indexOf(guess); //ПРОВЕРЯЕМ БЫЛО ЛИ СОВПАДЕНИЕ С МАСИВОМ КАРАБЛЕЙ
             if (index >= 0) {
                 view.displayHit(guess)
                 view.displayMessage("YOU HIT!!!!")
@@ -121,7 +121,7 @@ let model = {
             }
         }
         view.displayMiss(guess);
-        view.displayMessage("MISS)))")
+        view.displayMessage("MISS)))");
         return false;
     },
     isSunk: function (ship) {// done or not
@@ -131,86 +131,118 @@ let model = {
             }
         }
         return true;
+    },
+    makeNewShips: function () {
+        let shipArrey;
+        for (let i = 0; i < this.numShip; i++) {
+            do {
+                shipArrey = this.makeRandomShip();
+            } while (this.collisionRandomShips(shipArrey));
+            this.ships[i].location = shipArrey;
+
+        }
+        console.log("Ships array: ");
+        console.log(this.ships);
+    },
+    makeRandomShip: function () {
+        let newShip = [];
+        let row, column;
+        let rowOrColumn = Math.floor(Math.random() * 2)
+        if (rowOrColumn === 0) {
+            //row
+            row = Math.floor(Math.random() * (this.bordSize - this.shipsLength));
+            column = Math.floor(Math.random() * this.bordSize);
+            row++;
+            column++;
+            for (let i = 0; i < this.shipsLength; i++) {
+                newShip[i] = ".id" + (row + i) + " " + ".id" + column;
+            }
+        } else {
+            //column
+            column = Math.floor(Math.random() * (this.bordSize - this.shipsLength));
+            row = Math.floor(Math.random() * this.bordSize);
+            column++;
+            row++;
+            for (let i = 0; i < this.shipsLength; i++) {
+                newShip[i] = ".id" + row + " " + ".id" + (column + i);
+            }
+        }
+        return newShip;
+    },
+    collisionRandomShips: function (newShip) {
+        for (let i = 0; i < this.shipsLength; i++) {
+            for (let j = 0; j < this.shipsLength; j++) {
+                if (this.ships[i].location[j] === newShip[i]) {
+                    return true;
+                }
+
+            }
+
+        }
+        return false;
     }
 
 }
 let controller = {
     guesses: 0,
     processGuesses: function (guess) {
-        let location = 0;
-        if ( parsesGuess(guess)) {
-             location = parsesGuess(guess);
+        let location = parsesGuess(guess); // null or guess
+        if (location) {  // if location !==null
             this.guesses++
+            let hit = model.fire(location) //функцию иницыализируют с координарами выстрела и ее значение записывают в переменную
+            if (hit && model.shipsSunk === model.numShip) {
+                view.displayMessage("YOU ARE SUNK " + model.shipsSunk + " MY BOTLESHIP!!\n" +
+                    "<p>Guesses:" + this.guesses + "</p><p>Hits:......" + (model.shipsSunk * model.shipsLength) +
+                    "</p><p>Result:.." + (Math.floor(100 * ((model.shipsSunk * model.shipsLength) / this.guesses))) + "</p>")
+            }
         }
-        let hit = model.fire(location)
-        if(hit && model.shipsSunk === model.numShip){
-            view.displayMessage("YOU ARE SUNK "+model.shipsSunk+" MY BOTLESHIP!!\n"+
-                "<p>Guesses:"+ this.guesses+"</p><p>Hits:......"+(model.shipsSunk*model.shipsLength)+
-                "</p><p>Result:.."+ (100*((model.shipsSunk*model.shipsLength)/this.guesses))+"</p>")
-        }
-    },
-
+    }
 }
 
 function parsesGuess(guess) {
     let alphabet = ["A", "B", "C", "D", "E", "F", "G",];
+
     if (guess === null || guess.length !== 2) {
-        view.displayMessage(guess + " wrong guess!");
-        return guess = null;
+        alert(guess + " wrong guess!"); // view.displayMessage
+    }else {
+
+        let firstChar = guess.charAt(0); //берем первый символ
+        let row = alphabet.indexOf(firstChar); //сверяем превый символ с проверочным масивом
+        let column = guess.charAt(1); // берем второй символ
+
+        if (isNaN(column) || column < 0 || column >= model.bordSize || row === -1) {
+            alert(guess + " wrong guess!"); // view.displayMessage
+        }else {
+            row++;
+            column++;
+            return ".id" + row + " " + ".id" + column;
+        }
     }
-    let firstChar = guess.charAt(0);
-    let row = alphabet.indexOf(firstChar);
-    let column = guess.charAt(1);
-    if (isNaN(column) || column < 0 || column >= model.bordSize || row === -1) {
-        view.displayMessage(guess + " wrong guess!");
-        return guess = null;
-    }
-    row++;
-    column++;
-    return ".id" + row + " " + ".id" + column;
+    return null;
 }
-function init(){
-    let button = document.querySelector('.button');
-    button.onclick = heandleButton;
-    let press = document.querySelector('.press');
-     press.onkeypress = heandleKeyPress;
+
+function init() {
+    let button = document.querySelector('.button'); // getElementById
+    button.onclick = heandleButton; // КЛИКУ МЫШИ ПО КНОПКЕ ПРИСВАЕВАЕТСЯ ФУНКЦИЯ
+    let press = document.querySelector('.press'); // getElementById
+    press.onkeypress = heandleKeyPress; //НАЖАТИЮ КЛАВИШИ ПРИСВАЕВАЕТСЯ ФУКЦИЯ
+
+    model.makeNewShips();
 }
-function heandleButton(){
-    let press = document.querySelector('.press');
-     let guess = press.value;
-     controller.processGuesses(guess);
-    press.value ="";
+
+function heandleButton() {
+    let press = document.querySelector('.press'); //getElementById
+    let guess = press.value; // ПОЛУЧАЕМ ЗНАЧЕНИЕ ИЗ ФОРМЫ
+    controller.processGuesses(guess);
+    press.value = "";
 }
-function heandleKeyPress(e){
-    let button = document.querySelector('.button');
+
+function heandleKeyPress(e) { // ЗАПУСКАЕТ КЛИК ПО КНОПКЕ, УСЛИ БЫЛ НАЖАТ ЕНТЕР
+    let button = document.querySelector('.button'); //getElementById
     if (e.keyCode === 13) {
         button.click();
         return false;
     }
 }
- window.onload = init();
-/*controller.processGuesses("A0");
-controller.processGuesses("A2");
-controller.processGuesses("A4");
-controller.processGuesses("B0");
-controller.processGuesses("B2");
-controller.processGuesses("B4");
-controller.processGuesses("B5");
-controller.processGuesses("C0");
-controller.processGuesses("C2");
-controller.processGuesses("C4");*/
+window.onload = init();
 
-
-
-
-/*console.log(parsesGuess(""))
-alert(parsesGuess("0A"))*/
-/*model.fire('.id1 .id3');
-model.fire('.id2 .id3');
-model.fire('.id3 .id3');
-model.fire('.id3 .id6');
-model.fire('.id4 .id2');
-model.fire('.id7 .id7');*/
-/*view.displayMessage("some masemfgfdhjgfdjh");
-view.displayHit('.id3 .id6');
-view.displayMiss(".id3 .id7")*/
