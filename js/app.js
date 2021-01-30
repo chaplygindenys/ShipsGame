@@ -113,7 +113,7 @@ let model = {
                 ship.hits[index] = 'hit';
                 if (this.isSunk(ship)) {
                     this.shipsSunk++
-                    view.displayMessage("YOU ARE SUNK MY BOOTLSHIP!!")
+                    view.displayMessage("YOU ARE SUNK MY BATTLESHIP!!")
                 }
                 return true;
             }
@@ -169,7 +169,7 @@ let model = {
     },
     collisionRandomShips: function (newShip) {
         for (let i = 0; i < this.numShip; i++) {
-            let ship=this.ships[i];
+            let ship = this.ships[i];
             for (let j = 0; j < newShip.length; j++) {
                 if (ship.location.indexOf(newShip[j]) >= 0) {
                     return true;
@@ -185,13 +185,26 @@ let model = {
 let controller = {
 
     guesses: 0,
+    processGuessesWithOutParses: function (guess) {
+        let location = guess; // null or guess
+        if (location) {  // if location !==null
+            this.guesses++
+            let hit = model.fire(location) //функцию иницыализируют с координарами выстрела и ее значение записывают в переменную
+            if (hit && model.shipsSunk === model.numShip) {
+                view.displayMessage("YOU ARE SUNK " + model.shipsSunk + " MY BATTLESHIPS!!\n" +
+                    "<p>Guesses:" + this.guesses + "</p><p>Hits:......" + (model.shipsSunk * model.shipsLength) +
+                    "</p><p>Result:.." + (Math.floor(100 * ((model.shipsSunk * model.shipsLength) / this.guesses))) + "</p>")
+            }
+        }
+    },
+
     processGuesses: function (guess) {
         let location = parsesGuess(guess); // null or guess
         if (location) {  // if location !==null
             this.guesses++
             let hit = model.fire(location) //функцию иницыализируют с координарами выстрела и ее значение записывают в переменную
             if (hit && model.shipsSunk === model.numShip) {
-                view.displayMessage("YOU ARE SUNK " + model.shipsSunk + " MY BOTLESHIP!!\n" +
+                view.displayMessage("YOU ARE SUNK " + model.shipsSunk + " MY BATTLESHIPS!!\n" +
                     "<p>Guesses:" + this.guesses + "</p><p>Hits:......" + (model.shipsSunk * model.shipsLength) +
                     "</p><p>Result:.." + (Math.floor(100 * ((model.shipsSunk * model.shipsLength) / this.guesses))) + "</p>")
             }
@@ -229,6 +242,8 @@ function init() {
     button.onclick = heandleButton; // КЛИКУ МЫШИ ПО КНОПКЕ ПРИСВАЕВАЕТСЯ ФУНКЦИЯ
     let press = document.querySelector('.press'); // getElementById
     press.onkeypress = heandleKeyPress; //НАЖАТИЮ КЛАВИШИ ПРИСВАЕВАЕТСЯ ФУКЦИЯ
+    let table = document.querySelector('table'); // getElementById
+    table.onclick = heandleKeyTable;
     model.makeNewShips();
 
 }
@@ -246,6 +261,23 @@ function heandleKeyPress(e) { // ЗАПУСКАЕТ КЛИК ПО КНОПКЕ, 
         button.click();
         return false;
     }
+}
+
+function heandleKeyTable() {
+    let selectedTd = "";
+    let selectedTr = "";
+    let ptarget = "";
+    let relatedTarget = "";
+    let table = document.querySelector('table');
+    table.onclick = function (event) {
+        ptarget = event.target; // где был клик?
+        relatedTarget = event.target.parentNode;
+        let classTd = ptarget.className;
+        let classTr = relatedTarget.className;
+        let mouseGauss = "." + classTr + " " + "." + classTd;
+        controller.processGuessesWithOutParses(mouseGauss);
+    };
+
 }
 
 window.onload = init();
