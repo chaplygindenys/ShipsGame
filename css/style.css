@@ -31,6 +31,11 @@ table{
  td{
      width: 95px;
      height: 96px;
+
+ }
+ td:hover{
+     background-color: #172c05;
+     opacity: 70%;
  }
  form{
 
@@ -65,7 +70,7 @@ position: absolute;
     background: url("../img/miss.png") no-repeat center center;
 }
 .rolls{
-    font: Montserrat;
+    font-family: Montserrat;
     font-weight: 400;
     font-size:40px;
     color:#172c05;

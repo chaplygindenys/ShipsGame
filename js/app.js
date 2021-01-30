@@ -168,9 +168,10 @@ let model = {
         return newShip;
     },
     collisionRandomShips: function (newShip) {
-        for (let i = 0; i < this.shipsLength; i++) {
-            for (let j = 0; j < this.shipsLength; j++) {
-                if (this.ships[i].location[j] === newShip[i]) {
+        for (let i = 0; i < this.numShip; i++) {
+            let ship=this.ships[i];
+            for (let j = 0; j < newShip.length; j++) {
+                if (ship.location.indexOf(newShip[j]) >= 0) {
                     return true;
                 }
 
